@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Service
-public class Subtract implements RPCBinaryOperatorFunction {
+public class Subtract implements RPCFunction {
 
     private static final String FUNCT_NAME = "-";
 
@@ -16,9 +16,14 @@ public class Subtract implements RPCBinaryOperatorFunction {
     }
 
     @Override
-    public BigDecimal evaluate(BigDecimal p1, BigDecimal p2) {
+    public BigDecimal evaluateBinaryFunction(BigDecimal p1, BigDecimal p2) {
         final BigDecimal result = p1.subtract(p2);
         result.setScale(15, RoundingMode.HALF_UP);
         return result;
+    }
+
+    @Override
+    public BigDecimal evaluateUnaryFunction(BigDecimal p1) throws IllegalArgumentException {
+        throw new IllegalArgumentException();
     }
 }

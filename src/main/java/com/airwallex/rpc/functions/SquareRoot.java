@@ -4,10 +4,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
 
 @Service
-public class SquareRoot implements RPCUnaryOperatorFunction {
+public class SquareRoot implements RPCFunction {
     private static final String FUNCT_NAME = "sqrt";
 
     @Override
@@ -16,9 +15,14 @@ public class SquareRoot implements RPCUnaryOperatorFunction {
     }
 
     @Override
-    public BigDecimal evaluate(BigDecimal p1) {
+    public BigDecimal evaluateUnaryFunction (BigDecimal p1) {
         MathContext mc = new MathContext(15);
         final BigDecimal result = p1.sqrt(mc);
         return result;
+    }
+
+    @Override
+    public BigDecimal evaluateBinaryFunction(BigDecimal p1, BigDecimal p2) {
+        throw new IllegalArgumentException();
     }
 }

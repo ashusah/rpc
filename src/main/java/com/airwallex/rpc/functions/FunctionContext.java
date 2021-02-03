@@ -11,6 +11,10 @@ public class FunctionContext {
     }
 
     public BigDecimal evaluate(BigDecimal p1, BigDecimal p2) {
-        return rpcFunction.evaluate(p1, p2);
+        return rpcFunction.evaluateBinaryFunction(p1, p2);
+    }
+
+    public BigDecimal evaluate (BigDecimal p1) {
+        return rpcFunction.evaluateUnaryFunction(p1);
     }
 }

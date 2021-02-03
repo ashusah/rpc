@@ -16,7 +16,7 @@ public class SquareRootTest {
     private SquareRoot squareRoot = new SquareRoot();
 
     static Stream<Arguments> getNumbers(){
-        return Stream.of(Arguments.arguments(new BigDecimal(4)));
+        return Stream.of(Arguments.arguments(new BigDecimal(4), new BigDecimal(9)));
 
     }
 
@@ -24,6 +24,6 @@ public class SquareRootTest {
     @MethodSource("getNumbers")
     void evaluateSquareRootTest(BigDecimal p1) {
         BigDecimal expectedResult = new BigDecimal(2);
-        assertEquals(expectedResult, squareRoot.evaluate(p1));
+        assertEquals(expectedResult, squareRoot.evaluateUnaryFunction(p1));
     }
 }
