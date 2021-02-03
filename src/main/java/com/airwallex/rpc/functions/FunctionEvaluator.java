@@ -48,14 +48,13 @@ public class FunctionEvaluator {
 
     private static RPCFunction resolveOperatorClass(String operator) {
 
-        switch (operator) {
-            case "+":
+        switch (OperatorEnum.valueOfOperatorSymbol(operator)) {
+            case ADD:
                 return new Add();
-            case "-":
+            case SUBTRACT:
                 return new Subtract();
             default:
                 throw new IllegalArgumentException("Incorrect Operator");
         }
-
     }
 }
