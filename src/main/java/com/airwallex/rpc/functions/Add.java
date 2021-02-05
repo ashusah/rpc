@@ -1,12 +1,21 @@
 package com.airwallex.rpc.functions;
 
+import com.airwallex.rpc.functions.enums.OperatorEnum;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import static com.airwallex.rpc.functions.enums.OperatorEnum.ADD;
+
 @Service
 public class Add implements RPCFunction {
+    private static final String FUNCT_NAME = ADD.toString();
+
+    @Override
+    public String getFunctionName() {
+        return FUNCT_NAME;
+    }
 
     @Override
     public boolean isUnaryOperator() {

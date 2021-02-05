@@ -1,12 +1,7 @@
 package com.airwallex.rpc.functions.enums;
 
-public enum OperatorEnum {
+public enum SpecialOperatorEnum {
 
-    ADD("+"),
-    SUBTRACT("-"),
-    MULTIPLY("*"),
-    DIVIDE("/"),
-    SQRT("sqrt"),
     CLEAR("clear"),
     UNDO("undo");
 
@@ -17,12 +12,12 @@ public enum OperatorEnum {
         return operatorSymbol;
     }
 
-    OperatorEnum(String s) {
+    SpecialOperatorEnum(String s) {
         this.operatorSymbol = s;
     }
 
-    public static OperatorEnum valueOfOperatorSymbol(String label) {
-        for(OperatorEnum e: values()) {
+    public static SpecialOperatorEnum valueOfOperatorSymbol(String label) {
+        for(SpecialOperatorEnum e: values()) {
             if(e.operatorSymbol.equals(label))
                 return e;
         }

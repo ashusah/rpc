@@ -1,5 +1,6 @@
 # rpc
 To start application enter spring boot run command - "mvn spring-boot:run"
+Debug - mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
 
 **Requirements**
 The calculator has a stack that can contain real numbers.
