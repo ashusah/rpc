@@ -4,21 +4,21 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 
 @Service
 public class SquareRoot implements RPCFunction {
-    private static final String FUNCT_NAME = "sqrt";
 
     @Override
-    public String getFunctionName() {
-        return FUNCT_NAME;
+    public boolean isUnaryOperator() {
+        return true;
     }
 
     @Override
     public BigDecimal evaluateUnaryFunction (BigDecimal p1) {
-        MathContext mc = new MathContext(15);
-        final BigDecimal result = p1.sqrt(mc);
-        return result;
+        final double sqrtInDouble = Math.sqrt(p1.doubleValue());
+        return BigDecimal.valueOf(sqrtInDouble).setScale(15, RoundingMode.HALF_UP);
+
     }
 
     @Override

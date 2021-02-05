@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public interface RPCFunction {
 
-    String getFunctionName();
+    boolean isUnaryOperator();
 
     BigDecimal evaluateUnaryFunction (BigDecimal p1) throws IllegalArgumentException;
 

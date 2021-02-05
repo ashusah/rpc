@@ -7,11 +7,10 @@ import java.math.RoundingMode;
 
 @Service
 public class Add implements RPCFunction {
-    private static final String FUNCT_NAME = "+";
 
     @Override
-    public String getFunctionName() {
-        return FUNCT_NAME;
+    public boolean isUnaryOperator() {
+        return false;
     }
 
     @Override

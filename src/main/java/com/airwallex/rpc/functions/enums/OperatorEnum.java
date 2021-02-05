@@ -4,6 +4,9 @@ public enum OperatorEnum {
 
     ADD("+"),
     SUBTRACT("-"),
+    MULTIPLY("*"),
+    DIVIDE("/"),
+    SQRT("sqrt"),
     CLEAR("clear"),
     UNDO("undo");
 
