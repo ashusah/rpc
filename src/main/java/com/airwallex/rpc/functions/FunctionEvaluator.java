@@ -45,7 +45,7 @@ public class FunctionEvaluator {
                         return stack;
                     }
 
-                    stack = processFunctionOperator(stack);
+                    stack = processFunctionOperator(stack, rpcFunction);
                 }
             } else {
                 try {
@@ -63,11 +63,24 @@ public class FunctionEvaluator {
         return ((isUnaryOperator && size < 1) || (!isUnaryOperator && size < 2));
     }
 
-    private static Stack<BigDecimal> processFunctionOperator(Stack<BigDecimal> stack) {
+    private static Stack<BigDecimal> processFunctionOperator(Stack<BigDecimal> stack, RPCFunction rpcFunction) {
 
         momentoStack.push((Stack<BigDecimal>) stack.clone());
 
-        return FunctionEvaluator.call(stack, rpcFunction);
+        functionContext = new FunctionContext(rpcFunction);
+
+        final BigDecimal operand2 = stack.pop();
+
+        if (rpcFunction.isUnaryOperator()) {
+
+            stack.push(functionContext.evaluate(operand2));
+
+        } else {
+            final BigDecimal operand1 = stack.pop();
+            stack.push(functionContext.evaluate(operand1, operand2));
+        }
+
+        return stack;
 
     }
 
@@ -75,14 +88,19 @@ public class FunctionEvaluator {
         switch (operatorEnum) {
             case CLEAR:
                 stack.clear();
+                //Assuming after clear command it cannot be undone
+                momentoStack.clear();
                 break;
             case UNDO:
-                stack = momentoStack.pop();
+                if (!momentoStack.isEmpty())
+                    stack = momentoStack.pop();
+                else {
+                    stack.pop();
+                }
                 break;
         }
         return stack;
     }
-
 
     private static RPCFunction resolveFunctionClass(OperatorEnum operatorEnum) {
         switch (operatorEnum) {
@@ -104,29 +122,5 @@ public class FunctionEvaluator {
     private static boolean isASpecialOperator(OperatorEnum operatorEnum) {
         return operatorEnum.equals(UNDO) || operatorEnum.equals(CLEAR);
     }
-
-
-    public static Stack<BigDecimal> call(Stack<BigDecimal> stack, RPCFunction rpcFunction) {
-
-        final BigDecimal result = evaluate(stack, rpcFunction);
-        stack.push(result);
-        return stack;
-    }
-
-    private static BigDecimal evaluate(Stack<BigDecimal> stack, RPCFunction rpcFunction) {
-
-        functionContext = new FunctionContext(rpcFunction);
-
-        final BigDecimal operand2 = stack.pop();
-
-        if (rpcFunction.isUnaryOperator()) {
-            return functionContext.evaluate(operand2);
-        }
-
-        final BigDecimal operand1 = stack.pop();
-
-        return functionContext.evaluate(operand1, operand2);
-    }
-
 
 }

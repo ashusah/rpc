@@ -1,8 +1,7 @@
 package com.airwallex.rpc.calculator;
 
-import com.airwallex.rpc.exception.OperatorNotFoundException;
-import com.airwallex.rpc.functions.*;
-import com.airwallex.rpc.functions.enums.OperatorEnum;
+import com.airwallex.rpc.functions.FunctionEvaluator;
+import com.airwallex.rpc.functions.RPCFunction;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -35,8 +34,6 @@ public class Calculator implements CommandLineRunner {
         }
     }
 
-
-
     private void printStack(Stack<BigDecimal> stack) {
         NumberFormat nf = new DecimalFormat("##.##########");
         System.out.print("Stack: ");
@@ -45,5 +42,4 @@ public class Calculator implements CommandLineRunner {
         });
         System.out.println();
     }
-
 }

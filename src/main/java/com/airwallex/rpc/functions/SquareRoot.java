@@ -25,7 +25,7 @@ public class SquareRoot implements RPCFunction {
     @Override
     public BigDecimal evaluateUnaryFunction(BigDecimal p1) {
         final double sqrtInDouble = Math.sqrt(p1.doubleValue());
-        return BigDecimal.valueOf(sqrtInDouble).setScale(15, RoundingMode.HALF_UP);
+        return BigDecimal.valueOf(sqrtInDouble).setScale(15, RoundingMode.HALF_UP).stripTrailingZeros();
 
     }
 
