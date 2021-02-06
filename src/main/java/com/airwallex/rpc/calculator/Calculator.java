@@ -20,6 +20,54 @@ public class Calculator implements CommandLineRunner {
     private static final Stack<Stack<BigDecimal>> momentoStack = new Stack<>();
     private static RPCFunction rpcFunction;
 
+
+    @Override
+    public void run(String... args) throws Exception {
+        Scanner scanInput = new Scanner(System.in);
+        Stack<BigDecimal> stack = new Stack<>();
+
+        while (true) {
+
+            System.out.println("Enter operands and operator");
+            String[] input = scanInput.nextLine().split(" ");
+
+            for (int i = 0; i < input.length; i++) {
+
+                final OperatorEnum operatorEnum = OperatorEnum.valueOfOperatorSymbol(input[i]);
+
+                if (operatorEnum != null) {
+                    if(isASpecialOperator(operatorEnum)) {
+                        stack = performSpecialOperation(stack, operatorEnum);
+                    } else {
+
+                        rpcFunction = resolveFunctionClass(operatorEnum);
+
+                        if (!isParameterSufficient(stack, rpcFunction)) {
+                            final String message = String.format("Operator %s (position: %d): Insufficient Parameters",
+                                    input[i], (i * 2) + 1);
+                            System.out.println(message);
+                            break;
+                        }
+
+                        momentoStack.push((Stack<BigDecimal>) stack.clone());
+
+                        stack = FunctionEvaluator.call(stack, rpcFunction);
+
+                    }
+                } else {
+                    try {
+                        stack.push(new BigDecimal(input[i]));
+                    } catch (Exception e) {
+                        throw new OperatorNotFoundException("Operator Not Found.." + input[i], e);
+                    }
+
+                }
+            }
+
+            printStack(stack);
+        }
+    }
+
     private static RPCFunction resolveFunctionClass(OperatorEnum operator) {
 
         switch (operator) {
@@ -43,56 +91,17 @@ public class Calculator implements CommandLineRunner {
                 || (!rpcFunction.isUnaryOperator() && stack.size() > 1);
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        Scanner scanInput = new Scanner(System.in);
-        Stack<BigDecimal> stack = new Stack<>();
-
-        while (true) {
-
-            System.out.println("Enter operands and operator");
-            String[] input = scanInput.nextLine().split(" ");
-
-            for (int i = 0; i < input.length; i++) {
-
-                final OperatorEnum operatorEnum = OperatorEnum.valueOfOperatorSymbol(input[i]);
-
-                if (operatorEnum != null) {
-
-                    switch (operatorEnum) {
-                        case CLEAR:
-                            stack.clear();
-                            break;
-                        case UNDO:
-                            stack = momentoStack.pop();
-                            break;
-                        default:
-                            rpcFunction = resolveFunctionClass(operatorEnum);
-
-                            if (!isParameterSufficient(stack, rpcFunction)) {
-                                final String message = String.format("Operator %s (position: %d): Insufficient Parameters",
-                                        input[i], (i * 2) + 1);
-                                System.out.println(message);
-                                break;
-                            }
-
-                            momentoStack.push((Stack<BigDecimal>) stack.clone());
-
-                            stack = FunctionEvaluator.call(stack, rpcFunction);
-                    }
-
-                } else {
-                    try {
-                        stack.push(new BigDecimal(input[i]));
-                    } catch (Exception e) {
-                        throw new OperatorNotFoundException("Operator Not Found.." + input[i], e);
-                    }
-
-                }
-            }
-
-            printStack(stack);
+    private Stack<BigDecimal> performSpecialOperation(Stack<BigDecimal> stack, OperatorEnum operatorEnum) {
+        switch (operatorEnum) {
+            case CLEAR:
+                stack.clear();
+                break;
+            case UNDO:
+                stack = momentoStack.pop();
+                break;
         }
+
+        return stack;
     }
 
     private boolean isASpecialOperator(OperatorEnum operatorEnum) {
